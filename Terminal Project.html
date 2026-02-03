@@ -492,14 +492,14 @@
   <!-- Intro Screen -->
   <div id="intro">
     <div class="intro-header">
-      <h1 class="intro-title">TERMINAL PORTFOLIO v2.0</h1>
-      <p class="intro-subtitle">Made with 💚 by 3 friends who love coding</p>
+      <h1 class="intro-title">TERMINAL PORTFOLIO</h1>
+      <p class="intro-subtitle">Made with HTML,CSS and JS by 3 friends.</p>
     </div>
 
     <div class="intro-section">
       <div class="section-title">📁 About This Project</div>
       <div class="section-content">
-        <p>Hey there! This is our interactive terminal portfolio. We built this because we were bored of boring static websites and wanted something that actually shows what we can do.</p>
+        <p>This is our interactive terminal portfolio. We built this because we were bored of boring static websites and wanted something that actually shows what we can do.</p>
         <p>It's a fully functional terminal in your browser. You can navigate files, play games, check "weather", and explore our portfolios. Try breaking it - we dare you! (but pls don't hack us)</p>
         
         <ul class="feature-list">
@@ -555,7 +555,7 @@
         <div class="user-card d" data-user="dixit">
           <div class="user-avatar">D</div>
           <div class="user-name">Dixit Neupane</div>
-          <div class="user-role">Full Stack & Bug Hunter</div>
+          <div class="user-role">Bug Hunter</div>
         </div>
       </div>
       <button class="start-btn" id="start-btn" style="display:none;">Enter Terminal</button>
@@ -610,41 +610,36 @@
     const users = {
       prayatna: {
         name: "Prayatna Sapkota",
-        role: "Frontend Developer & UI/UX Wizard",
+        role: "Frontend Developer & UI/UX",
         skills: [
-          { name: "React", level: 90 },
-          { name: "TypeScript", level: 85 },
-          { name: "Tailwind CSS", level: 95 },
-          { name: "Node.js", level: 75 },
-          { name: "Python", level: 70 },
-          { name: "C/C++", level: 65 }
+          { name: "Html", level: 90 },
+           { name: "css", level: 70 },
+            { name: "js", level: 40 },
+          { name: "Python", level: 10 },
+          { name: "Linux", level: 65 }
         ],
         projects: [
-          { name: "Terminal Portfolio", desc: "This terminal you're using right now", tech: ["HTML", "CSS", "JS"], stars: 42 },
-          { name: "Neon Weather", desc: "Cyberpunk weather dashboard", tech: ["React", "API"], stars: 28 },
-          { name: "Matrix Chat", desc: "Encrypted messaging app", tech: ["Socket.io", "MongoDB"], stars: 56 }
+          { name: "Terminal Portfolio", desc: "This terminal you're using right now", tech: ["HTML", "CSS", "JS"], stars: 42 }
         ],
         city: "Banepa",
         country: "Nepal",
         fun: "Richard Feynman fanboy - watches lectures for fun",
         color: "#7ee787",
         github: "github.com/prayatsapkota",
-        email: "prayatna@example.com"
+        email: "mail@prayatnasapkota.com.np"
       },
       shubham: {
         name: "Shubham Pradhananga",
         role: "Backend Developer & Database Architect",
         skills: [
-          { name: "Node.js", level: 92 },
+          { name: "HTML", level: 92 },
           { name: "Python", level: 88 },
-          { name: "PostgreSQL", level: 90 },
-          { name: "Docker", level: 80 },
-          { name: "AWS", level: 75 },
-          { name: "GraphQL", level: 70 }
+          { name: "CSS", level: 90 },
+          { name: "DATABSE", level: 80 },
+          { name: "Linux", level: 75 }
         ],
         projects: [
-          { name: "API Gateway", desc: "Microservices orchestration", tech: ["Node.js", "Redis", "K8s"], stars: 67 },
-          { name: "Data Pipeline", desc: "Real-time data processing", tech: ["Kafka", "Spark", "Python"], stars: 45 }
+          { name: "Portfolio", desc: "Made his Own Portfolio You can it in the github", tech: ["html", "CSS", "JS"], stars: 67 }
         ],
         city: "Banepa",
         country: "Nepal",
@@ -655,17 +650,15 @@
       },
       dixit: {
         name: "Dixit Neupane",
-        role: "Full Stack Developer & Bug Hunter",
+        role: "Bug Hunter",
         skills: [
-          { name: "JavaScript", level: 88 },
-          { name: "React", level: 82 },
-          { name: "PHP", level: 85 },
-          { name: "Laravel", level: 80 },
-          { name: "MySQL", level: 78 },
-          { name: "Linux", level: 75 }
+          { name: "JavaScript", level: 68 },
+          { name: "HTML", level: 72 },
+          { name: "CSS", level: 85 }
+          
         ],
         projects: [
-          { name: "E-Commerce Platform", desc: "Full-stack store with Stripe", tech: ["React", "Laravel", "Stripe"], stars: 34 }
+          { name: "E-Commerce Platform", desc: "Full-stack store with Stripe", tech: ["React", "HTML", "CSS"], stars: 34 }
         ],
         city: "Panauti",
         country: "Nepal",
@@ -707,7 +700,7 @@
         }
       },
       etc: {
-        "motd": "Welcome to Terminal Portfolio v2.0!",
+        "motd": "Welcome to Terminal Portfolio!!",
         "config.json": '{"theme": "cyberpunk", "animations": true, "sounds": true}',
         "passwd": "root:x:0:0:root:/root:/bin/bash\\nprayatna:x:1000:1000:Prayatna:/home/prayatna:/bin/bash\\nshubham:x:1001:1001:Shubham:/home/shubham:/bin/bash\\ndixit:x:1002:1002:Dixit:/home/dixit:/bin/bash"
       },
@@ -727,13 +720,14 @@
 
     const asciiArt = {
       main: `
-    ____  ____  ___  ____  _   _ _____ _     _____ ____  
-   |  _ \\|  _ \\|_ _|/ ___|| | | | ____| |   | ____|  _ \\ 
-   | |_) | |_) || | \\___ \\| |_| |  _| | |   |  _| | |_) |
-   |  __/|  _ < | |  ___) |  _  | |___| |___| |___|  _ < 
-   |_|   |_| \\_\\___|____/|_| |_|_____|_____|_____|_| \\_\\
-                                                          
-    PORTFOLIO v2.0 - Made with 💚`,
+████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
+╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
+   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
+   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
+   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
+   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+                                      
+  `,
       skull: `
          _____
        /       \\
@@ -879,7 +873,7 @@
     function initTerminal() {
       updatePrompt();
       print(asciiArt.main);
-      print(`\nWelcome to Terminal Portfolio v2.0!`);
+      print(`\nWelcome to Terminal Portfolio!`);
       print(`Current user: <span style="color:${users[currentUser].color}">${users[currentUser].name}</span>`);
       print(`Type <span class="yellow">help</span> to see available commands.\n`);
 
@@ -1413,7 +1407,7 @@
 <div>
 <div><span class="green">${u.name}</span>@portfolio</div>
 <div class="dim">---------------------</div>
-<div><span class="dim">OS:</span> Terminal Portfolio v2.0</div>
+<div><span class="dim">OS:</span> Terminal Portfolio</div>
 <div><span class="dim">Host:</span> GitHub Pages</div>
 <div><span class="dim">Kernel:</span> Vanilla JS ES6+</div>
 <div><span class="dim">Uptime:</span> ${Math.floor((Date.now() - startTime) / 1000)}s</div>
