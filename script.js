@@ -1,886 +1,726 @@
-/**
- * CodeCraft Trio - Team Portfolio JavaScript
- * Modular, clean, and well-organized
- */
+/* ============================================
+   TERMINAL PORTFOLIO - SIMPLE JAVASCRIPT
+   ============================================
+   
+   This file controls:
+   1. Tab switching (Feed, About, Projects, Guestbook)
+   2. Dark/Light theme toggle
+   3. The interactive terminal
+   
+   Everything is simple and easy to explain!
+*/
 
 // ============================================
-// TEAM DATA
+// DATA - Information about each team member
 // ============================================
-const teamMembers = {
+const members = {
     prayatna: {
         name: "Prayatna Sapkota",
-        role: "Frontend Developer & UI/UX",
+        role: "Frontend Developer",
+        color: "#7ee787",
         skills: [
             { name: "HTML", level: 90 },
             { name: "CSS", level: 85 },
-            { name: "JavaScript", level: 70 },
-            { name: "Python", level: 40 },
-            { name: "Linux", level: 65 }
+            { name: "JavaScript", level: 70 }
         ],
         projects: [
-            { name: "Terminal Portfolio", desc: "Interactive terminal portfolio with file system", tech: ["HTML", "CSS", "JS"], stars: 42 },
-            { name: "Weather Dashboard", desc: "Real-time weather app with location detection", tech: ["JS", "API"], stars: 28 }
+            { name: "Terminal Portfolio", desc: "This website!", stars: 42 },
+            { name: "Weather App", desc: "Shows weather using API", stars: 28 }
         ],
         city: "Banepa",
         country: "Nepal",
-        fun: "Richard Feynman fanboy - watches physics lectures for fun",
-        color: "#7ee787",
-        github: "github.com/prayatnasapkota",
-        email: "prayatna@codecraft.np"
+        fun: "Loves physics videos",
+        email: "prayatna@example.com"
     },
     shubham: {
         name: "Shubham Pradhananga",
-        role: "Backend Developer & Database Architect",
+        role: "Backend Developer",
+        color: "#79c0ff",
         skills: [
-            { name: "HTML/CSS", level: 92 },
-            { name: "Python", level: 88 },
-            { name: "Node.js", level: 80 },
-            { name: "Database", level: 85 },
-            { name: "Linux", level: 75 }
+            { name: "PHP", level: 88 },
+            { name: "Python", level: 85 },
+            { name: "Database", level: 80 }
         ],
         projects: [
-            { name: "Personal Portfolio", desc: "Modern portfolio with dark mode and animations", tech: ["HTML", "CSS", "JS"], stars: 67 },
-            { name: "API Gateway", desc: "Microservices orchestration system", tech: ["Node.js", "Express"], stars: 45 }
+            { name: "Portfolio", desc: "Personal website", stars: 67 },
+            { name: "API System", desc: "Backend for apps", stars: 45 }
         ],
         city: "Banepa",
         country: "Nepal",
-        fun: "Black Panther fan - Wakanda Forever!",
-        color: "#79c0ff",
-        github: "github.com/shubhampradhananga",
-        email: "shubham@codecraft.np"
+        fun: "Black Panther fan",
+        email: "shubham@example.com"
     },
     dixit: {
         name: "Dixit Neupane",
-        role: "Bug Hunter & QA Specialist",
+        role: "QA & Testing",
+        color: "#d2a8ff",
         skills: [
+            { name: "Testing", level: 90 },
             { name: "JavaScript", level: 75 },
-            { name: "HTML/CSS", level: 80 },
-            { name: "Testing", level: 85 },
-            { name: "Debugging", level: 90 }
+            { name: "Debugging", level: 85 }
         ],
         projects: [
-            { name: "E-Commerce Platform", desc: "Full-stack store with payment integration", tech: ["JS", "HTML", "CSS"], stars: 34 },
-            { name: "Bug Tracker", desc: "Issue tracking system for developers", tech: ["JS", "Node.js"], stars: 29 }
+            { name: "Bug Tracker", desc: "Finds and tracks bugs", stars: 34 },
+            { name: "E-Commerce", desc: "Online store project", stars: 29 }
         ],
         city: "Panauti",
         country: "Nepal",
-        fun: "No plans for politics... yet 👀",
-        color: "#d2a8ff",
-        github: "github.com/dixitneupane",
-        email: "dixit@codecraft.np"
+        fun: "Future politician?",
+        email: "dixit@example.com"
     }
 };
 
-// Simulated File System
-const fileSystem = {
+// Fake file system for terminal
+const files = {
     home: {
-        prayatna: {
-            "README.md": "# Prayatna's Home\n\nWelcome to my directory!\n\n- Check out my projects/ folder\n- View my skills\n- Contact me anytime",
-            "skills.txt": "Frontend Skills:\n- HTML/CSS: Expert\n- JavaScript: Advanced\n- UI/UX Design: Intermediate",
-            projects: {
-                "terminal.md": "# Terminal Portfolio\n\nBuilt with vanilla JS. No frameworks!",
-                "weather.md": "# Weather App\n\nReal-time forecasts using OpenWeather API"
-            }
-        },
-        shubham: {
-            "README.md": "# Shubham's Home\n\nBackend wizard at your service.",
-            "server.js": "const express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n  res.json({ msg: 'Hello World' });\n});",
-            projects: {
-                "api.md": "# API Gateway\n\nMicroservices orchestration"
-            }
-        },
-        dixit: {
-            "README.md": "# Dixit's Home\n\nI find bugs so you don't have to.",
-            "debug.log": "[2025-02-06] INFO: All systems operational\n[2025-02-06] DEBUG: No bugs found (yet)",
-            projects: {
-                "qa.md": "# QA Process\n\nTesting strategies and methodologies"
-            }
-        }
-    },
-    etc: {
-        "motd": "Welcome to CodeCraft Terminal! Type 'help' to get started.",
-        "config.json": '{"theme": "cyberpunk", "animations": true}'
+        prayatna: { "README.txt": "Welcome to Prayatna's folder!", projects: {} },
+        shubham: { "README.txt": "Welcome to Shubham's folder!", projects: {} },
+        dixit: { "README.txt": "Welcome to Dixit's folder!", projects: {} }
     }
 };
 
-// ASCII Art Collection
-const asciiArt = {
-    logo: `
-   ____          _      _____            _   
-  / ___|___   __| | ___|  ___|__ _ _ __ | |_ 
- | |   / _ \\ / _\` |/ _ \\ |_ / _\` | '_ \\| __|
- | |__| (_) | (_| |  __/  _| (_| | | | | |_ 
-  \\____\\___/ \\__,_|\\___|_|  \\__,_|_| |_|\\__|
-                                              
-    `,
-    tux: `
-       .---.
-      /     \\
-     | o   o |
-     |  >    |
-     |  \\__/ |
-      \\_____/
-      /     \\
-    ~~Linux~~`,
-    cat: `
-      /\\_/\\
-     ( o.o )
-      > ^ <
-     /|   |\\
-    (_|   |_)
-    ~Catto~`
-};
+// ============================================
+// STATE - What is currently happening
+// ============================================
+let currentUser = "prayatna";  // Which member is selected
+let currentPath = "/home/prayatna";  // Current folder in terminal
+let commandHistory = [];  // List of typed commands
+let historyIndex = -1;  // For arrow key navigation
+let gameMode = null;  // If user is playing a game
 
 // ============================================
-// APP STATE
+// TAB SWITCHING
 // ============================================
-const AppState = {
-    currentTab: 'feed',
-    currentUser: 'prayatna',
-    currentDir: '/home/prayatna',
-    commandHistory: [],
-    historyIndex: -1,
-    commandCount: 0,
-    gameMode: null,
-    startTime: Date.now()
-};
-
-// ============================================
-// DOM ELEMENTS CACHE
-// ============================================
-const DOM = {};
-
-function cacheDOMElements() {
-    DOM.navItems = document.querySelectorAll('.nav-item');
-    DOM.sections = {
-        feed: document.getElementById('feed-section'),
-        about: document.getElementById('about-section'),
-        content: document.getElementById('content-section'),
-        guestbook: document.getElementById('guestbook-section')
-    };
-    DOM.themeToggle = document.getElementById('theme-toggle');
-    DOM.body = document.body;
+function setupTabs() {
+    // Get all tab buttons
+    const tabs = document.querySelectorAll(".nav-item");
     
-    // Terminal elements
-    DOM.terminalOutput = document.getElementById('terminal-output');
-    DOM.terminalInput = document.getElementById('terminal-input');
-    DOM.terminalPrompt = document.getElementById('terminal-prompt');
-    DOM.terminalTitle = document.getElementById('terminal-title');
-    DOM.terminalBody = document.getElementById('terminal-body');
-    DOM.userSelectBtns = document.querySelectorAll('.user-select-btn');
-    DOM.quickCmds = document.querySelectorAll('.quick-cmd');
-    DOM.statusUser = document.getElementById('status-user');
-    DOM.statusDir = document.getElementById('status-dir');
-    DOM.statusCmds = document.getElementById('status-cmds');
-    
-    // Modal elements
-    DOM.socialModal = document.getElementById('socialModal');
-    DOM.linksButton = document.getElementById('links-button');
-    DOM.closeModal = document.querySelector('.close-modal');
-    
-    // Guestbook
-    DOM.guestbookForm = document.getElementById('guestbook-form');
-    DOM.guestbookEntries = document.getElementById('guestbook-entries-container');
-    
-    // Newsletter
-    DOM.newsletterForm = document.getElementById('newsletter-form');
-}
-
-// ============================================
-// TAB NAVIGATION
-// ============================================
-function initTabNavigation() {
-    DOM.navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const tabName = item.dataset.tab;
-            switchTab(tabName);
+    // Add click event to each tab
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            // Get the tab name (feed, about, projects, guestbook)
+            const tabName = tab.dataset.tab;
+            
+            // Remove 'active' class from all tabs
+            tabs.forEach(t => t.classList.remove("active"));
+            
+            // Add 'active' class to clicked tab
+            tab.classList.add("active");
+            
+            // Hide all sections
+            document.getElementById("feed-section").classList.add("hidden");
+            document.getElementById("about-section").classList.add("hidden");
+            document.getElementById("projects-section").classList.add("hidden");
+            document.getElementById("guestbook-section").classList.add("hidden");
+            
+            // Show the clicked section
+            document.getElementById(tabName + "-section").classList.remove("hidden");
+            
+            // If About tab, scroll to top of About section
+            if (tabName === "about") {
+                document.getElementById("about-start").scrollIntoView({ behavior: "smooth" });
+            }
         });
     });
 }
 
-function switchTab(tabName) {
-    // Update nav items
-    DOM.navItems.forEach(nav => nav.classList.remove('active'));
-    document.querySelector(`.nav-item[data-tab="${tabName}"]`).classList.add('active');
+// ============================================
+// THEME TOGGLE (Dark/Light mode)
+// ============================================
+function setupTheme() {
+    const toggle = document.getElementById("theme-toggle");
+    const body = document.body;
     
-    // Show/hide sections with fade effect
-    Object.keys(DOM.sections).forEach(key => {
-        const section = DOM.sections[key];
-        if (key === tabName) {
-            section.classList.remove('hidden');
-            section.classList.add('fade-in');
+    // Check saved theme
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        body.classList.remove("dark-theme");
+        toggle.textContent = "☀️";
+    }
+    
+    // When button is clicked
+    toggle.addEventListener("click", () => {
+        body.classList.toggle("dark-theme");
+        
+        // Save preference
+        if (body.classList.contains("dark-theme")) {
+            localStorage.setItem("theme", "dark");
+            toggle.textContent = "🌙";
         } else {
-            section.classList.add('hidden');
-            section.classList.remove('fade-in');
+            localStorage.setItem("theme", "light");
+            toggle.textContent = "☀️";
         }
     });
-    
-    AppState.currentTab = tabName;
-    
-    // Focus terminal if about tab
-    if (tabName === 'about' && DOM.terminalInput) {
-        setTimeout(() => DOM.terminalInput.focus(), 100);
-    }
 }
 
 // ============================================
-// THEME TOGGLE
+// TERMINAL FUNCTIONS
 // ============================================
-function initThemeToggle() {
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        DOM.body.classList.add(savedTheme);
-    } else {
-        DOM.body.classList.add('dark-theme');
-        localStorage.setItem('theme', 'dark-theme');
-    }
-    
-    DOM.themeToggle.addEventListener('click', () => {
-        DOM.body.classList.toggle('dark-theme');
-        const theme = DOM.body.classList.contains('dark-theme') ? 'dark-theme' : 'light';
-        localStorage.setItem('theme', theme);
-    });
-}
 
-// ============================================
-// TERMINAL FUNCTIONALITY
-// ============================================
-function initTerminal() {
-    // User selector buttons
-    DOM.userSelectBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const user = btn.dataset.user;
-            switchUser(user);
-        });
-    });
-    
-    // Quick command buttons
-    DOM.quickCmds.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const cmd = btn.dataset.cmd;
-            DOM.terminalInput.value = cmd;
-            executeCommand(cmd);
-            DOM.terminalInput.value = '';
-        });
-    });
-    
-    // Input handling
-    DOM.terminalInput.addEventListener('keydown', handleTerminalInput);
-    
-    // Initial terminal setup
-    switchUser('prayatna');
-}
-
+// Switch to a different user
 function switchUser(user) {
-    if (!teamMembers[user]) return;
+    if (!members[user]) return;
     
-    AppState.currentUser = user;
-    AppState.currentDir = `/home/${user}`;
+    currentUser = user;
+    currentPath = "/home/" + user;
     
-    // Update UI
-    DOM.userSelectBtns.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.user === user);
+    // Update buttons
+    document.querySelectorAll(".user-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.user === user);
     });
     
-    // Clear and reinitialize terminal
-    DOM.terminalOutput.innerHTML = '';
-    updateTerminalPrompt();
-    printToTerminal(asciiArt.logo, false);
-    printToTerminal(`\nWelcome to CodeCraft Terminal!`, false);
-    printToTerminal(`Current user: <span style="color:${teamMembers[user].color}">${teamMembers[user].name}</span>`, false);
-    printToTerminal(`Type <span class="term-yellow">help</span> to see available commands.\n`, false);
+    // Clear terminal and show welcome
+    const output = document.getElementById("term-output");
+    output.innerHTML = "";
     
-    DOM.terminalInput.focus();
+    // Show ASCII art
+    printToTerminal(`
+  _____                   _             _ _ _   
+ |_   _|__ _ __ _ __ ___ (_)_ __   __ _| (_) |_ 
+   | |/ _ \\ '__| '_ \\ _ \\| | '_ \\ / _\` | | | __|
+   | |  __/ |  | | | | | | | | | | (_| | | | |_ 
+   |_|\\___|_|  |_| |_| |_|_|_| |_|\\__,_|_|_|\\__|
+    `);
+    
+    printToTerminal("Welcome to Terminal Portfolio!");
+    printToTerminal("User: " + members[user].name);
+    printToTerminal("Type 'help' to see commands.\n");
+    
+    updatePrompt();
 }
 
-function updateTerminalPrompt() {
-    const user = teamMembers[AppState.currentUser];
-    const promptText = `<span style="color:${user.color}">${AppState.currentUser}</span>@codecraft:<span class="term-blue">${AppState.currentDir}</span>$`;
-    DOM.terminalPrompt.innerHTML = promptText;
-    DOM.terminalTitle.textContent = `${AppState.currentUser}@codecraft:~`;
+// Update the terminal prompt text
+function updatePrompt() {
+    const user = members[currentUser];
+    const promptText = `<span style="color:${user.color}">${currentUser}</span>@terminal:<span class="term-blue">${currentPath}</span>$`;
     
-    // Update status bar
-    if (DOM.statusUser) DOM.statusUser.textContent = `user: ${AppState.currentUser}`;
-    if (DOM.statusDir) DOM.statusDir.textContent = `dir: ${AppState.currentDir}`;
-    if (DOM.statusCmds) DOM.statusCmds.textContent = `cmds: ${AppState.commandCount}`;
+    document.getElementById("term-prompt").innerHTML = promptText;
+    document.getElementById("term-title").textContent = currentUser + "@terminal:~";
 }
 
-function handleTerminalInput(e) {
-    if (e.key === 'Enter') {
-        const cmd = DOM.terminalInput.value.trim();
-        if (cmd) {
-            executeCommand(cmd);
-            AppState.commandHistory.push(cmd);
-            AppState.historyIndex = AppState.commandHistory.length;
-            AppState.commandCount++;
-            updateTerminalPrompt();
+// Print text to terminal
+function printToTerminal(text) {
+    const output = document.getElementById("term-output");
+    const line = document.createElement("div");
+    line.className = "output-line";
+    line.innerHTML = text;
+    output.appendChild(line);
+    
+    // Auto scroll to bottom
+    const body = document.getElementById("term-body");
+    body.scrollTop = body.scrollHeight;
+}
+
+// Handle keyboard input in terminal
+function handleInput(event) {
+    const input = document.getElementById("term-input");
+    
+    // If Enter key pressed
+    if (event.key === "Enter") {
+        const command = input.value.trim();
+        
+        if (command !== "") {
+            // Show what user typed
+            const user = members[currentUser];
+            printToTerminal(`<span style="color:${user.color}">${currentUser}</span>@terminal:<span class="term-blue">${currentPath}</span>$ ${escapeHtml(command)}`);
+            
+            // Run the command
+            runCommand(command);
+            
+            // Save to history
+            commandHistory.push(command);
+            historyIndex = commandHistory.length;
         }
-        DOM.terminalInput.value = '';
-    } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (AppState.historyIndex > 0) {
-            AppState.historyIndex--;
-            DOM.terminalInput.value = AppState.commandHistory[AppState.historyIndex];
+        
+        // Clear input
+        input.value = "";
+    }
+    
+    // Arrow up - previous command
+    else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (historyIndex > 0) {
+            historyIndex--;
+            input.value = commandHistory[historyIndex];
         }
-    } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (AppState.historyIndex < AppState.commandHistory.length - 1) {
-            AppState.historyIndex++;
-            DOM.terminalInput.value = AppState.commandHistory[AppState.historyIndex];
+    }
+    
+    // Arrow down - next command
+    else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+            input.value = commandHistory[historyIndex];
         } else {
-            AppState.historyIndex = AppState.commandHistory.length;
-            DOM.terminalInput.value = '';
+            historyIndex = commandHistory.length;
+            input.value = "";
         }
-    } else if (e.key === 'Tab') {
-        e.preventDefault();
-        autocompleteCommand();
+    }
+    
+    // Tab - autocomplete
+    else if (event.key === "Tab") {
+        event.preventDefault();
+        const commands = ["help", "about", "skills", "projects", "contact", "weather", "time", "ls", "cd", "cat", "pwd", "game", "hack", "joke", "neofetch", "clear"];
+        const val = input.value.toLowerCase();
+        const matches = commands.filter(c => c.startsWith(val));
+        
+        if (matches.length === 1) {
+            input.value = matches[0];
+        }
     }
 }
 
-function autocompleteCommand() {
-    const cmds = Object.keys(terminalCommands);
-    const val = DOM.terminalInput.value.toLowerCase();
-    const matches = cmds.filter(c => c.startsWith(val));
-    
-    if (matches.length === 1) {
-        DOM.terminalInput.value = matches[0];
-    } else if (matches.length > 1) {
-        printToTerminal(`<span class="term-dim">${matches.join('  ')}</span>`, false);
-    }
-}
-
-function executeCommand(cmdStr) {
-    const trimmed = cmdStr.trim();
-    if (!trimmed) return;
-    
-    // Print command line
-    const user = teamMembers[AppState.currentUser];
-    const cmdLine = document.createElement('div');
-    cmdLine.className = 'cmd-line';
-    cmdLine.innerHTML = `<span class="terminal-prompt"><span style="color:${user.color}">${AppState.currentUser}</span>@codecraft:<span class="term-blue">${AppState.currentDir}</span>$</span> ${escapeHtml(trimmed)}`;
-    DOM.terminalOutput.appendChild(cmdLine);
-    
-    // Handle game modes
-    if (AppState.gameMode) {
-        handleGameMode(trimmed);
-        return;
-    }
-    
-    const parts = trimmed.split(' ');
+// Run a terminal command
+function runCommand(cmdString) {
+    const parts = cmdString.split(" ");
     const cmd = parts[0].toLowerCase();
     const args = parts.slice(1);
     
-    if (terminalCommands[cmd]) {
-        const result = terminalCommands[cmd](args);
-        if (result instanceof Promise) {
-            result.then(output => {
-                if (output !== null) printToTerminal(output, false);
-            });
-        } else if (result !== null) {
-            printToTerminal(result, false);
-        }
+    // If playing a game, handle game input
+    if (gameMode) {
+        handleGame(cmdString);
+        return;
+    }
+    
+    // Run the command
+    switch (cmd) {
+        case "help":
+            showHelp();
+            break;
+        case "about":
+            showAbout();
+            break;
+        case "skills":
+            showSkills();
+            break;
+        case "projects":
+            showProjects();
+            break;
+        case "contact":
+            showContact();
+            break;
+        case "weather":
+            showWeather();
+            break;
+        case "time":
+            showTime();
+            break;
+        case "pwd":
+            printToTerminal(`<span class="term-cyan">${currentPath}</span>`);
+            break;
+        case "ls":
+            listFiles(args[0]);
+            break;
+        case "cd":
+            changeDirectory(args[0]);
+            break;
+        case "cat":
+            showFile(args[0]);
+            break;
+        case "game":
+            startGame(args[0]);
+            break;
+        case "hack":
+            fakeHack();
+            break;
+        case "joke":
+            showJoke();
+            break;
+        case "neofetch":
+            showNeofetch();
+            break;
+        case "clear":
+            document.getElementById("term-output").innerHTML = "";
+            break;
+        case "sudo":
+            printToTerminal(`<span class="term-red">Nice try! No sudo access here.</span>`);
+            break;
+        default:
+            printToTerminal(`<span class="term-red">Command not found: ${escapeHtml(cmd)}</span>`);
+            printToTerminal(`Type "help" for available commands`);
+    }
+}
+
+// Show help message
+function showHelp() {
+    const helpText = `
+<div class="term-box">
+<span class="term-yellow">Available Commands:</span><br><br>
+<span class="term-green">about</span>     - Show profile info<br>
+<span class="term-green">skills</span>    - Show technical skills<br>
+<span class="term-green">projects</span>  - List projects<br>
+<span class="term-green">contact</span>   - Contact information<br>
+<span class="term-green">weather</span>   - Check weather<br>
+<span class="term-green">time</span>      - Show current time<br>
+<span class="term-green">ls</span>        - List files<br>
+<span class="term-green">cd</span>        - Change directory<br>
+<span class="term-green">cat</span>       - View file contents<br>
+<span class="term-green">game</span>      - Play games<br>
+<span class="term-green">hack</span>      - Fake hacking ;)<br>
+<span class="term-green">joke</span>      - Random joke<br>
+<span class="term-green">neofetch</span>  - System info<br>
+<span class="term-green">clear</span>     - Clear screen<br>
+</div>
+<span class="term-muted">Tip: Use Tab to autocomplete, Up/Down for history</span>
+    `;
+    printToTerminal(helpText);
+}
+
+// Show member info
+function showAbout() {
+    const m = members[currentUser];
+    printToTerminal(`
+<div class="term-box">
+<span style="color:${m.color}">👤 ${m.name}</span><br>
+Role: <span class="term-blue">${m.role}</span><br>
+Location: ${m.city}, ${m.country}<br>
+Fun Fact: <span class="term-yellow">${m.fun}</span>
+</div>
+    `);
+}
+
+// Show skills with progress bars
+function showSkills() {
+    const m = members[currentUser];
+    let html = `<div class="term-box"><span style="color:${m.color}">🛠️ Skills:</span><br><br>`;
+    
+    m.skills.forEach(skill => {
+        html += `${skill.name}: <span class="term-green">${skill.level}%</span><br>`;
+        // Simple progress bar using equals signs
+        const filled = Math.round(skill.level / 10);
+        const empty = 10 - filled;
+        html += `[<span class="term-green">${"=".repeat(filled)}</span>${" ".repeat(empty)}]<br><br>`;
+    });
+    
+    html += "</div>";
+    printToTerminal(html);
+}
+
+// Show projects
+function showProjects() {
+    const m = members[currentUser];
+    let html = `<div class="term-box"><span style="color:${m.color}">📁 Projects:</span><br><br>`;
+    
+    m.projects.forEach(p => {
+        html += `<span class="term-yellow">${p.name}</span> ⭐ ${p.stars}<br>`;
+        html += `<span class="term-muted">${p.desc}</span><br><br>`;
+    });
+    
+    html += "</div>";
+    printToTerminal(html);
+}
+
+// Show contact info
+function showContact() {
+    const m = members[currentUser];
+    printToTerminal(`
+<div class="term-box">
+<span class="term-yellow">📧 Contact:</span><br><br>
+Email: <span class="term-blue">${m.email}</span><br>
+Location: ${m.city}, ${m.country}
+</div>
+    `);
+}
+
+// Show fake weather
+function showWeather() {
+    const m = members[currentUser];
+    const weathers = [
+        { icon: "☀️", text: "Sunny", temp: 28 },
+        { icon: "⛅", text: "Cloudy", temp: 24 },
+        { icon: "🌧️", text: "Rainy", temp: 20 }
+    ];
+    const w = weathers[Math.floor(Math.random() * weathers.length)];
+    
+    printToTerminal(`
+<div class="term-box" style="text-align:center">
+<div style="font-size:40px">${w.icon}</div>
+<div style="font-size:24px;color:var(--yellow)">${w.temp}°C</div>
+<div class="term-blue">${w.text}</div>
+<div class="term-muted">${m.city}, ${m.country}</div>
+</div>
+    `);
+}
+
+// Show current time
+function showTime() {
+    const now = new Date();
+    printToTerminal(`
+<div class="term-box">
+Local: ${now.toLocaleString()}<br>
+UTC: ${now.toUTCString()}
+</div>
+    `);
+}
+
+// List files (fake file system)
+function listFiles(path) {
+    const targetPath = path || currentPath;
+    
+    if (targetPath === "/home" || targetPath === "/home/" + currentUser) {
+        printToTerminal(`<span class="term-blue">📁 README.txt</span>  <span class="term-blue">📁 projects/</span>`);
+    } else if (targetPath === "/home/" + currentUser + "/projects") {
+        printToTerminal(`<span class="term-muted">Empty folder</span>`);
     } else {
-        printToTerminal(`<span class="term-red">bash: ${escapeHtml(cmd)}: command not found</span>`, false);
-        printToTerminal(`<span class="term-dim">Type "help" for available commands</span>`, false);
+        printToTerminal(`<span class="term-red">Folder not found</span>`);
     }
-    
-    scrollTerminal();
 }
 
-function handleGameMode(input) {
-    const mode = AppState.gameMode;
+// Change directory
+function changeDirectory(path) {
+    if (!path || path === "~") {
+        currentPath = "/home/" + currentUser;
+    } else if (path === "..") {
+        if (currentPath !== "/home") {
+            currentPath = "/home/" + currentUser;
+        }
+    } else if (path === "projects") {
+        currentPath = "/home/" + currentUser + "/projects";
+    } else {
+        printToTerminal(`<span class="term-red">cd: ${path}: No such folder</span>`);
+        return;
+    }
+    updatePrompt();
+}
+
+// Show file contents
+function showFile(filename) {
+    if (!filename) {
+        printToTerminal(`<span class="term-red">cat: Please specify a file</span>`);
+        return;
+    }
     
-    if (mode.type === 'guess') {
+    if (filename === "README.txt") {
+        printToTerminal(`<div class="term-box">Welcome to ${currentUser}'s folder!<br>This is a demo file system.</div>`);
+    } else {
+        printToTerminal(`<span class="term-red">cat: ${filename}: File not found</span>`);
+    }
+}
+
+// Start a game
+function startGame(gameName) {
+    if (!gameName) {
+        printToTerminal(`
+<div class="term-box">
+<span class="term-yellow">🎮 Games:</span><br><br>
+<span class="term-green">game guess</span> - Guess the number (1-100)<br>
+<span class="term-green">game rps</span>   - Rock Paper Scissors
+</div>
+        `);
+        return;
+    }
+    
+    if (gameName === "guess") {
+        gameMode = { type: "guess", number: Math.floor(Math.random() * 100) + 1, tries: 0 };
+        printToTerminal(`
+<div class="term-box">
+<span class="term-yellow">🎯 Guess the Number!</span><br><br>
+I'm thinking of a number between 1 and 100.<br>
+Type your guess!
+</div>
+        `);
+    } else if (gameName === "rps") {
+        gameMode = { type: "rps" };
+        printToTerminal(`
+<div class="term-box">
+<span class="term-yellow">✊ Rock Paper Scissors!</span><br><br>
+Type: rock, paper, or scissors
+</div>
+        `);
+    }
+}
+
+// Handle game input
+function handleGame(input) {
+    if (gameMode.type === "guess") {
         const guess = parseInt(input);
+        gameMode.tries++;
+        
         if (isNaN(guess)) {
-            printToTerminal('<span class="term-red">Please enter a number!</span>', false);
+            printToTerminal(`<span class="term-red">Please enter a number!</span>`);
             return;
         }
-        mode.attempts++;
-        if (guess === mode.target) {
-            printToTerminal(`<span class="term-green">🎉 Correct! The number was ${mode.target}</span>`, false);
-            printToTerminal(`<span class="term-dim">Attempts: ${mode.attempts}</span>`, false);
-            AppState.gameMode = null;
-        } else if (guess < mode.target) {
-            printToTerminal('<span class="term-yellow">📈 Too low! Try higher.</span>', false);
+        
+        if (guess === gameMode.number) {
+            printToTerminal(`<span class="term-green">🎉 Correct! The number was ${gameMode.number}</span>`);
+            printToTerminal(`<span class="term-muted">Tries: ${gameMode.tries}</span>`);
+            gameMode = null;
+        } else if (guess < gameMode.number) {
+            printToTerminal(`<span class="term-yellow">📈 Too low! Try higher.</span>`);
         } else {
-            printToTerminal('<span class="term-yellow">📉 Too high! Try lower.</span>', false);
+            printToTerminal(`<span class="term-yellow">📉 Too high! Try lower.</span>`);
         }
-    } else if (mode.type === 'rps') {
-        const choices = ['rock', 'paper', 'scissors'];
+    } else if (gameMode.type === "rps") {
+        const choices = ["rock", "paper", "scissors"];
         const userChoice = input.toLowerCase();
+        
         if (!choices.includes(userChoice)) {
-            printToTerminal('<span class="term-red">Type rock, paper, or scissors!</span>', false);
+            printToTerminal(`<span class="term-red">Type: rock, paper, or scissors</span>`);
             return;
         }
-        const compChoice = choices[Math.floor(Math.random() * 3)];
-        let result = '';
         
-        if (userChoice === compChoice) result = "It's a tie!";
-        else if (
-            (userChoice === 'rock' && compChoice === 'scissors') ||
-            (userChoice === 'paper' && compChoice === 'rock') ||
-            (userChoice === 'scissors' && compChoice === 'paper')
-        ) result = '<span class="term-green">You win! 🎉</span>';
-        else result = '<span class="term-red">Computer wins! 💻</span>';
+        const computerChoice = choices[Math.floor(Math.random() * 3)];
+        let result = "";
         
-        printToTerminal(`You: ${userChoice} | Computer: ${compChoice}`, false);
-        printToTerminal(result, false);
-        AppState.gameMode = null;
+        if (userChoice === computerChoice) {
+            result = "It's a tie!";
+        } else if (
+            (userChoice === "rock" && computerChoice === "scissors") ||
+            (userChoice === "paper" && computerChoice === "rock") ||
+            (userChoice === "scissors" && computerChoice === "paper")
+        ) {
+            result = `<span class="term-green">You win! 🎉</span>`;
+        } else {
+            result = `<span class="term-red">Computer wins! 💻</span>`;
+        }
+        
+        printToTerminal(`You: ${userChoice} | Computer: ${computerChoice}`);
+        printToTerminal(result);
+        gameMode = null;
     }
+}
+
+// Fake hacking animation
+function fakeHack() {
+    const steps = [
+        "Initializing...",
+        "Bypassing firewall...",
+        "Accessing mainframe...",
+        "Downloading data..."
+    ];
     
-    scrollTerminal();
+    steps.forEach((step, i) => {
+        setTimeout(() => {
+            const progress = "=".repeat(i + 1) + ">".repeat(4 - i);
+            printToTerminal(`[<span class="term-green">${progress}</span>] ${step}`);
+        }, i * 500);
+    });
+    
+    setTimeout(() => {
+        printToTerminal(`<span class="term-green">ACCESS GRANTED (just kidding! 😄)</span>`);
+    }, 2500);
 }
 
-function printToTerminal(html, animate = false) {
-    const line = document.createElement('div');
-    line.className = 'output-line';
-    line.innerHTML = html;
-    DOM.terminalOutput.appendChild(line);
-    scrollTerminal();
+// Show random joke
+function showJoke() {
+    const jokes = [
+        "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
+        "Why did the developer go broke? Because he used up all his cache! 💸",
+        "What's a programmer's favorite place? The Foo Bar! 🍺",
+        "Why do Java devs wear glasses? Because they don't C#! 👓"
+    ];
+    const joke = jokes[Math.floor(Math.random() * jokes.length)];
+    
+    printToTerminal(`
+<div class="term-box">
+<span class="term-yellow">😂 Joke:</span><br><br>
+${joke}
+</div>
+    `);
 }
 
-function scrollTerminal() {
-    DOM.terminalBody.scrollTop = DOM.terminalBody.scrollHeight;
+// Show system info
+function showNeofetch() {
+    const m = members[currentUser];
+    printToTerminal(`
+<div style="display:flex;gap:15px">
+<pre style="color:var(--green);font-size:10px">
+    .---.
+   /     \\
+  | o   o |
+  |  >    |
+  |  \\__/ |
+   \\_____/
+</pre>
+<div>
+<span style="color:${m.color}">${m.name}</span>@terminal<br>
+----------------<br>
+<span class="term-muted">OS:</span> Terminal Portfolio<br>
+<span class="term-muted">Shell:</span> custom-terminal<br>
+<span class="term-muted">Theme:</span> Cyberpunk<br>
+<span class="term-muted">Uptime:</span> ${Math.floor(performance.now() / 1000)}s
+</div>
+</div>
+    `);
 }
 
+// Helper: Make text safe to display
 function escapeHtml(text) {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
 }
 
 // ============================================
-// TERMINAL COMMANDS
+// SETUP TERMINAL
 // ============================================
-const terminalCommands = {
-    help: () => {
-        return `<div class="term-box">
-<div class="term-box-title">📚 Available Commands</div>
-<div class="term-grid">
-  <div><span class="term-yellow">about</span> <span class="term-dim">- Profile info</span></div>
-  <div><span class="term-yellow">skills</span> <span class="term-dim">- Tech skills</span></div>
-  <div><span class="term-yellow">projects</span> <span class="term-dim">- Show projects</span></div>
-  <div><span class="term-yellow">contact</span> <span class="term-dim">- Contact info</span></div>
-  <div><span class="term-yellow">weather</span> <span class="term-dim">- Check weather</span></div>
-  <div><span class="term-yellow">time</span> <span class="term-dim">- Current time</span></div>
-  <div><span class="term-yellow">ls</span> <span class="term-dim">- List files</span></div>
-  <div><span class="term-yellow">cd</span> <span class="term-dim">- Change directory</span></div>
-  <div><span class="term-yellow">cat</span> <span class="term-dim">- View file</span></div>
-  <div><span class="term-yellow">pwd</span> <span class="term-dim">- Current path</span></div>
-  <div><span class="term-yellow">game</span> <span class="term-dim">- Play games</span></div>
-  <div><span class="term-yellow">hack</span> <span class="term-dim">- Fake hacking</span></div>
-  <div><span class="term-yellow">ascii</span> <span class="term-dim">- ASCII art</span></div>
-  <div><span class="term-yellow">joke</span> <span class="term-dim">- Random joke</span></div>
-  <div><span class="term-yellow">neofetch</span> <span class="term-dim">- System info</span></div>
-  <div><span class="term-yellow">clear</span> <span class="term-dim">- Clear screen</span></div>
-</div>
-</div>
-<span class="term-dim">💡 Tip: Use Tab to autocomplete, Up/Down for history</span>`;
-    },
-
-    about: () => {
-        const u = teamMembers[AppState.currentUser];
-        return `<div class="term-box" style="border-left-color: ${u.color}">
-<div class="term-box-title" style="color:${u.color}">👤 ${u.name}</div>
-<div><span class="term-dim">Role:</span> <span class="term-blue">${u.role}</span></div>
-<div><span class="term-dim">Location:</span> ${u.city}, ${u.country}</div>
-<div><span class="term-dim">Fun Fact:</span> <span class="term-yellow">${u.fun}</span></div>
-</div>`;
-    },
-
-    skills: () => {
-        const u = teamMembers[AppState.currentUser];
-        let html = `<div class="term-box-title" style="color:${u.color}">🛠️ Technical Skills</div>`;
-        u.skills.forEach(s => {
-            html += `<div style="margin:8px 0;display:flex;gap:12px;align-items:center;">
-<span style="min-width:100px;color:var(--term-orange)">${s.name}</span>
-<div style="flex:1;height:10px;background:var(--term-bg-lighter);border-radius:5px;overflow:hidden;">
-<div style="height:100%;width:${s.level}%;background:linear-gradient(90deg,${u.color},var(--term-cyan));border-radius:5px;"></div>
-</div>
-<span class="term-dim">${s.level}%</span>
-</div>`;
+function setupTerminal() {
+    // User buttons in terminal
+    document.querySelectorAll(".user-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            switchUser(btn.dataset.user);
         });
-        return `<div class="term-box">${html}</div>`;
-    },
-
-    projects: () => {
-        const u = teamMembers[AppState.currentUser];
-        if (!u.projects.length) return '<span class="term-dim">No projects yet.</span>';
-        let html = `<div class="term-box-title" style="color:${u.color}">📁 Projects</div>`;
-        u.projects.forEach(p => {
-            html += `<div class="term-box" style="margin:10px 0;border-left:3px solid var(--term-blue);">
-<div style="color:var(--term-yellow);font-weight:600;margin-bottom:6px;">${p.name} <span class="term-dim">⭐ ${p.stars}</span></div>
-<div class="term-dim" style="margin-bottom:8px;">${p.desc}</div>
-<div>${p.tech.map(t => `<span style="background:var(--term-bg-lighter);color:var(--term-cyan);padding:2px 8px;border-radius:4px;font-size:0.8em;margin-right:5px;">${t}</span>`).join('')}</div>
-</div>`;
-        });
-        return html;
-    },
-
-    contact: () => {
-        const u = teamMembers[AppState.currentUser];
-        return `<div class="term-box">
-<div class="term-box-title">📧 Contact Information</div>
-<div><span class="term-dim">Email:</span> <span class="term-blue">${u.email}</span></div>
-<div><span class="term-dim">GitHub:</span> <span class="term-blue">${u.github}</span></div>
-<div><span class="term-dim">Location:</span> ${u.city}, ${u.country}</div>
-</div>`;
-    },
-
-    weather: async () => {
-        const u = teamMembers[AppState.currentUser];
-        const conditions = [
-            { icon: '☀️', desc: 'Sunny', temp: 28 },
-            { icon: '⛅', desc: 'Partly Cloudy', temp: 24 },
-            { icon: '☁️', desc: 'Cloudy', temp: 20 },
-            { icon: '🌧️', desc: 'Rainy', temp: 18 },
-            { icon: '⛈️', desc: 'Thunderstorm', temp: 16 }
-        ];
-        const w = conditions[Math.floor(Math.random() * conditions.length)];
-
-        return `<div class="term-box" style="text-align:center;max-width:250px;">
-<div style="font-size:48px;margin-bottom:10px;">${w.icon}</div>
-<div style="font-size:32px;font-weight:700;color:var(--term-yellow);">${w.temp}°C</div>
-<div class="term-blue" style="margin:5px 0;">${w.desc}</div>
-<div class="term-dim">${u.city}, ${u.country}</div>
-</div>`;
-    },
-
-    time: () => {
-        const now = new Date();
-        return `<div class="term-box">
-<div><span class="term-dim">Local:</span> ${now.toLocaleString()}</div>
-<div><span class="term-dim">UTC:</span> ${now.toUTCString()}</div>
-<div><span class="term-dim">Timestamp:</span> ${now.getTime()}</div>
-</div>`;
-    },
-
-    pwd: () => `<span class="term-cyan">${AppState.currentDir}</span>`,
-
-    ls: (args) => {
-        const path = args[0] || AppState.currentDir;
-        const parts = path.split('/').filter(Boolean);
-        let curr = fileSystem;
-
-        for (const part of parts) {
-            if (curr && curr[part]) curr = curr[part];
-            else return `<span class="term-red">ls: cannot access '${path}': No such file or directory</span>`;
-        }
-
-        if (typeof curr === 'string') {
-            return `<span class="term-red">ls: '${path}': Not a directory</span>`;
-        }
-
-        const items = Object.entries(curr).map(([name, val]) => {
-            const isDir = typeof val === 'object';
-            return `<span class="${isDir ? 'term-blue' : ''}">${isDir ? '📁' : '📄'} ${name}</span>`;
-        });
-
-        return `<div style="display:flex;flex-wrap:wrap;gap:15px;">${items.join('')}</div>`;
-    },
-
-    cd: (args) => {
-        const path = args[0];
-        if (!path || path === '~') {
-            AppState.currentDir = `/home/${AppState.currentUser}`;
-            updateTerminalPrompt();
-            return null;
-        }
-        if (path === '..') {
-            const parts = AppState.currentDir.split('/').filter(Boolean);
-            if (parts.length > 1) {
-                parts.pop();
-                AppState.currentDir = '/' + parts.join('/');
-            }
-            updateTerminalPrompt();
-            return null;
-        }
-
-        const newPath = path.startsWith('/') ? path : `${AppState.currentDir}/${path}`;
-        const parts = newPath.split('/').filter(Boolean);
-        let curr = fileSystem;
-
-        for (const part of parts) {
-            if (curr && curr[part]) curr = curr[part];
-            else return `<span class="term-red">cd: '${path}': No such file or directory</span>`;
-        }
-
-        if (typeof curr === 'string') {
-            return `<span class="term-red">cd: '${path}': Not a directory</span>`;
-        }
-
-        AppState.currentDir = newPath;
-        updateTerminalPrompt();
-        return null;
-    },
-
-    cat: (args) => {
-        const filename = args[0];
-        if (!filename) return `<span class="term-red">cat: missing file operand</span>`;
-
-        const path = filename.startsWith('/') ? filename : `${AppState.currentDir}/${filename}`;
-        const parts = path.split('/').filter(Boolean);
-        const fname = parts.pop();
-        let curr = fileSystem;
-
-        for (const part of parts) {
-            if (curr && curr[part]) curr = curr[part];
-            else return `<span class="term-red">cat: '${filename}': No such file or directory</span>`;
-        }
-
-        if (!curr || typeof curr !== 'object' || !curr[fname]) {
-            return `<span class="term-red">cat: '${filename}': No such file or directory</span>`;
-        }
-
-        const content = curr[fname];
-        if (typeof content === 'object') {
-            return `<span class="term-red">cat: '${filename}': Is a directory</span>`;
-        }
-
-        return `<div style="background:var(--term-bg-light);padding:12px;border-radius:6px;margin:8px 0;"><pre style="white-space:pre-wrap;color:var(--term-fg-dim);margin:0;">${escapeHtml(content)}</pre></div>`;
-    },
-
-    game: (args) => {
-        const game = args[0];
-        if (!game) {
-            return `<div class="term-box">
-<div class="term-box-title">🎮 Available Games</div>
-<div><span class="term-yellow">game guess</span> <span class="term-dim">- Guess number (1-100)</span></div>
-<div><span class="term-yellow">game rps</span> <span class="term-dim">- Rock Paper Scissors</span></div>
-</div>`;
-        }
-
-        if (game === 'guess') {
-            AppState.gameMode = { type: 'guess', target: Math.floor(Math.random() * 100) + 1, attempts: 0 };
-            return `<div class="term-box">
-<div class="term-box-title">🎯 Guess the Number</div>
-<div>I'm thinking of a number between 1 and 100.</div>
-<div class="term-dim">Type your guess and press Enter!</div>
-</div>`;
-        }
-
-        if (game === 'rps') {
-            AppState.gameMode = { type: 'rps' };
-            return `<div class="term-box">
-<div class="term-box-title">✊ Rock Paper Scissors</div>
-<div>Type <span class="term-yellow">rock</span>, <span class="term-yellow">paper</span>, or <span class="term-yellow">scissors</span>!</div>
-</div>`;
-        }
-
-        return `<span class="term-red">Unknown game: ${game}</span>`;
-    },
-
-    hack: () => {
-        const steps = [
-            'Initializing hack sequence...',
-            'Bypassing firewall...',
-            'Cracking passwords...',
-            'Accessing mainframe...',
-            'Downloading secrets...',
-            'Covering tracks...'
-        ];
-
-        let html = '';
-        steps.forEach((step, i) => {
-            html += `<div style="animation:fadeIn 0.3s ${i * 0.4}s both"><span class="term-green">[${'='.repeat(i + 1)}${'>'.padEnd(7 - i)}]</span> ${step}</div>`;
-        });
-        html += `<div class="term-green" style="margin-top:10px;animation:fadeIn 0.3s 2.4s both">ACCESS GRANTED (just kidding! 😄)</div>`;
-        return html;
-    },
-
-    ascii: (args) => {
-        const art = args[0] || 'logo';
-        if (asciiArt[art]) {
-            return `<pre style="color:var(--term-cyan);font-size:10px;line-height:1.2;overflow-x:auto;">${asciiArt[art]}</pre>`;
-        }
-        return `<span class="term-red">Unknown art: ${art}</span>
-<span class="term-dim">Available: logo, tux, cat</span>`;
-    },
-
-    joke: () => {
-        const jokes = [
-            "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
-            "Why did the developer go broke? Because he used up all his cache! 💸",
-            "What's a programmer's favorite hangout place? Foo Bar! 🍺",
-            "Why do Java developers wear glasses? Because they don't C#! 👓",
-            "How many programmers does it take to change a light bulb? None, that's a hardware problem! 💡",
-            "Why was the function sad? It didn't get any calls! 📞",
-            "What's the object-oriented way to become wealthy? Inheritance! 💰"
-        ];
-        const joke = jokes[Math.floor(Math.random() * jokes.length)];
-        return `<div class="term-box">
-<div class="term-box-title">😂 Random Joke</div>
-<div>${joke}</div>
-</div>`;
-    },
-
-    neofetch: () => {
-        const u = teamMembers[AppState.currentUser];
-        const uptime = Math.floor((Date.now() - AppState.startTime) / 1000);
-        return `<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
-<pre style="color:var(--term-green);font-size:9px;line-height:1.1;margin:0;">${asciiArt.tux}</pre>
-<div>
-<div><span class="term-green">${u.name}</span>@codecraft</div>
-<div class="term-dim">---------------------</div>
-<div><span class="term-dim">OS:</span> CodeCraft Terminal</div>
-<div><span class="term-dim">Host:</span> GitHub Pages</div>
-<div><span class="term-dim">Kernel:</span> Vanilla JS ES6+</div>
-<div><span class="term-dim">Uptime:</span> ${uptime}s</div>
-<div><span class="term-dim">Shell:</span> custom-terminal</div>
-<div><span class="term-dim">Resolution:</span> ${window.innerWidth}x${window.innerHeight}</div>
-<div><span class="term-dim">Theme:</span> Cyberpunk</div>
-</div>
-</div>`;
-    },
-
-    sudo: () => {
-        return `<span class="term-red">Nice try! You don't have sudo privileges here.</span>
-<span class="term-dim">(we log these attempts btw 👀)</span>`;
-    },
-
-    whoami: () => `<span style="color:${teamMembers[AppState.currentUser].color}">${AppState.currentUser}</span>`,
-
-    echo: (args) => escapeHtml(args.join(' ')),
-
-    history: () => {
-        if (!AppState.commandHistory.length) return '<span class="term-dim">No command history.</span>';
-        return AppState.commandHistory.map((c, i) => `<span class="term-dim">${i + 1}</span> ${escapeHtml(c)}`).join('\n');
-    },
-
-    clear: () => {
-        DOM.terminalOutput.innerHTML = '';
-        return null;
-    },
-
-    rm: (args) => {
-        if (args[0] === '-rf' && args[1] === '/') {
-            return `<span class="term-red">bruh. you really tried to rm -rf / ?</span>
-<span class="term-dim">I'm not letting you destroy my beautiful filesystem.</span>`;
-        }
-        return `<span class="term-dim">File removed (simulated)</span>`;
-    }
-};
-
-// ============================================
-// SOCIAL MODAL
-// ============================================
-function initSocialModal() {
-    DOM.linksButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        DOM.socialModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
     });
-
-    const closeModal = () => {
-        DOM.socialModal.classList.remove('active');
-        document.body.style.overflow = '';
-    };
-
-    DOM.closeModal.addEventListener('click', closeModal);
-    DOM.socialModal.addEventListener('click', (e) => {
-        if (e.target === DOM.socialModal) closeModal();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && DOM.socialModal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-}
-
-// ============================================
-// GUESTBOOK
-// ============================================
-function initGuestbook() {
-    if (!DOM.guestbookForm) return;
     
-    DOM.guestbookForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const message = DOM.guestbookForm.querySelector('textarea').value.trim();
-        const name = DOM.guestbookForm.querySelector('input').value.trim();
-        
-        if (message && name) {
-            const entry = document.createElement('div');
-            entry.className = 'guestbook-entry';
-            entry.innerHTML = `
-                <div class="entry-header">
-                    <div class="user-avatar">👤</div>
-                    <div class="entry-info">
-                        <h3 class="entry-author">${escapeHtml(name)}</h3>
-                        <div class="entry-meta">
-                            <span class="entry-date">📅 ${new Date().toLocaleString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric', 
-                                hour: 'numeric', 
-                                minute: '2-digit',
-                                hour12: true 
-                            })}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="entry-content">
-                    <p>${escapeHtml(message)}</p>
-                </div>
-            `;
-            
-            DOM.guestbookEntries.prepend(entry);
-            DOM.guestbookForm.reset();
-        }
+    // Quick command buttons
+    document.querySelectorAll(".quick-cmds button").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const cmd = btn.dataset.cmd;
+            document.getElementById("term-input").value = cmd;
+            runCommand(cmd);
+            document.getElementById("term-input").value = "";
+            document.getElementById("term-input").focus();
+        });
     });
-}
-
-// ============================================
-// NEWSLETTER
-// ============================================
-function initNewsletter() {
-    if (!DOM.newsletterForm) return;
     
-    DOM.newsletterForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = DOM.newsletterForm.querySelector('input').value.trim();
-        
-        if (email) {
-            alert(`Thanks for subscribing with ${email}! We'll keep you updated on our latest projects.`);
-            DOM.newsletterForm.reset();
-        }
-    });
+    // Keyboard input
+    document.getElementById("term-input").addEventListener("keydown", handleInput);
+    
+    // Start with default user
+    switchUser("prayatna");
 }
 
 // ============================================
 // TEAM AVATAR CLICKS
 // ============================================
-function initTeamAvatars() {
-    document.querySelectorAll('.team-avatar').forEach(avatar => {
-        avatar.addEventListener('click', () => {
+function setupTeamAvatars() {
+    // Hero avatars - click to go to About and scroll to terminal
+    document.querySelectorAll(".team-avatar").forEach(avatar => {
+        avatar.addEventListener("click", () => {
             const member = avatar.dataset.member;
-            switchTab('about');
+            
+            // Click About tab
+            document.querySelector('.nav-item[data-tab="about"]').click();
+            
+            // Switch user
             switchUser(member);
+            
+            // Scroll to terminal
+            setTimeout(() => {
+                document.getElementById("terminal-section").scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 100);
         });
     });
     
-    document.querySelectorAll('.team-member-card').forEach(card => {
-        card.addEventListener('click', () => {
+    // Member cards - click to switch user
+    document.querySelectorAll(".member-card").forEach(card => {
+        card.addEventListener("click", () => {
             const member = card.dataset.member;
             switchUser(member);
-            DOM.terminalInput.focus();
+            document.getElementById("terminal-section").scrollIntoView({ behavior: "smooth", block: "center" });
+            document.getElementById("term-input").focus();
         });
     });
 }
 
 // ============================================
-// INITIALIZATION
+// START EVERYTHING WHEN PAGE LOADS
 // ============================================
-document.addEventListener('DOMContentLoaded', () => {
-    cacheDOMElements();
-    initTabNavigation();
-    initThemeToggle();
-    initTerminal();
-    initSocialModal();
-    initGuestbook();
-    initNewsletter();
-    initTeamAvatars();
+document.addEventListener("DOMContentLoaded", () => {
+    setupTabs();
+    setupTheme();
+    setupTerminal();
+    setupTeamAvatars();
     
-    console.log('🚀 CodeCraft Trio Portfolio Loaded!');
-    console.log('💻 Type "help" in the terminal to get started');
+    console.log("Terminal Portfolio loaded!");
 });
